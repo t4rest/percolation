@@ -3,11 +3,11 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
 
     private final int n;
-    private final int topVirtualSite;
-    private final int bottomVirtualSite;
+    private final int tvs; // top virtual site
+    private final int bvs; // bottom virtual site
     private int nOpenSites = 0;
     private final boolean[] openSites;
-    private final WeightedQuickUnionUF weightedQUSystem;
+    private final WeightedQuickUnionUF wqu;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -16,9 +16,9 @@ public class Percolation {
         }
 
         this.n = n;
-        this.topVirtualSite = n * n;
-        this.bottomVirtualSite = n * n + 1;
-        this.weightedQUSystem = new WeightedQuickUnionUF(n * n + 2);
+        this.tvs = n * n;
+        this.bvs = n * n + 1;
+        this.wqu = new WeightedQuickUnionUF(n * n + 2);
         this.openSites = new boolean[n * n];
     }
 
@@ -35,25 +35,25 @@ public class Percolation {
 
         // top row
         if (row == 1) {
-            // connect to topVirtualSite
-            this.weightedQUSystem.union(site, this.topVirtualSite);
+            // connect to tvs
+            this.wqu.union(site, this.tvs);
         } else {
             // connect to topSite if open
             int topSite = site - this.n;
             if (this.openSites[topSite]) {
-                this.weightedQUSystem.union(site, topSite);
+                this.wqu.union(site, topSite);
             }
         }
 
         // bottom row
         if (row == this.n) {
-            // connect to bottomVirtualSite
-            this.weightedQUSystem.union(site, this.bottomVirtualSite);
+            // connect to bvs
+            this.wqu.union(site, this.bvs);
         } else {
             // connect to bottomSite if open
             int bottomSite = site + this.n;
             if (this.openSites[bottomSite]) {
-                this.weightedQUSystem.union(site, bottomSite);
+                this.wqu.union(site, bottomSite);
             }
         }
 
@@ -62,7 +62,7 @@ public class Percolation {
             // connect left if open
             int leftSite = site - 1;
             if (this.openSites[leftSite]) {
-                this.weightedQUSystem.union(site, leftSite);
+                this.wqu.union(site, leftSite);
             }
         }
 
@@ -71,7 +71,7 @@ public class Percolation {
             // connect right if open
             int rightSite = site + 1;
             if (this.openSites[rightSite]) {
-                this.weightedQUSystem.union(site, rightSite);
+                this.wqu.union(site, rightSite);
             }
         }
 
@@ -97,7 +97,7 @@ public class Percolation {
             return false;
         }
 
-        return this.weightedQUSystem.find(this.topVirtualSite) == this.weightedQUSystem.find(site);
+        return this.wqu.find(this.tvs) == this.wqu.find(site);
     }
 
     // returns the number of open sites
@@ -107,7 +107,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return this.weightedQUSystem.find(this.topVirtualSite) == this.weightedQUSystem.find(this.bottomVirtualSite);
+        return this.wqu.find(this.tvs) == this.wqu.find(this.bvs);
     }
 
     // test client (optional)
