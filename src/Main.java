@@ -1,6 +1,8 @@
 public class Main {
     public static void main(String[] arg) {
        System.out.println("hi there");
+
+
     }
 }
 
@@ -14,5 +16,5 @@ public class Main {
 // 16 // top virtual site (N*N)
 // 17 // bottom virtual site (N*N+1)
 //
-// 1Dto2D = (row - 1) * n + col - 1;
+// twoD2oneD = (row - 1) * n + col - 1
 
